@@ -24,6 +24,7 @@ connection.onmessage = function (msg) {
             call_reject.addEventListener("click", function () {
                 call_status.innerHTML=''
                 alert('Call rejected')
+                rejectedCall(data.name)
             })
             break;
         case "answer":
@@ -32,6 +33,13 @@ connection.onmessage = function (msg) {
         case "candidate":
             candidateProcess(data.candidate);
             break;
+        case "reject":
+            rejectProcess();
+            break;
+        case "accept":
+            acceptProcess();
+            break;
+        
         default:   
             break;
     }
@@ -61,10 +69,12 @@ call_btn.addEventListener("click", function () {
     var call_reject = document.querySelector('.call-reject');
 
     call_reject.addEventListener('click', function () { 
+        acceptCall(data.name)
         call_status.innerHTML = ''
         alert('Call rejected')
+        rejectedCall(call_to_username)
     })
-    
+
     if (call_to_username.length > 0) {
         connected_user = call_to_username;
 
@@ -176,4 +186,22 @@ function answerProcess(answer) {
 
 function candidateProcess(candidate) {
     myConn.addIceCandidate(new RTCIceCandidate(candidate))
+}
+function rejectedCall(rejected_caller_or_callee) {
+    send({
+        type: "reject",
+        name: rejected_caller_or_callee
+    })
+}
+function rejectProcess() {
+    call_status.innerHTML = '';
+}
+function acceptCall(callee_name) {
+    send({
+        type: "accept",
+        name: callee_name
+    })
+}
+function acceptProcess() {
+    call_status.innerHTML = '';
 }

@@ -76,6 +76,30 @@ wss.on('connection', function (conn) {
                             candidate: data.candidate
                         })
                     }
+                break;
+            
+                case "reject":
+
+                    var connect = users[data.name];
+    
+                    if (connect != null) {
+                        sendToOtherUser(connect, {
+                            type: "reject",
+                            name: conn.name
+                        })
+                    }
+                break;
+            
+                case "accept":
+
+                    var connect = users[data.name];
+    
+                    if (connect != null) {
+                        sendToOtherUser(connect, {
+                            type: "accept",
+                            name: conn.name
+                        })
+                    }
                     break;
         }
     })
