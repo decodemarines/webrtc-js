@@ -12,7 +12,19 @@ connection.onmessage = function (msg) {
             loginProcess(data.success);
             break;
         case "offer":
-            offerProcess(data.offer, data.name)
+            call_status.innerHTML = '<div class="calling-status-wrap card black white-text"> <div class="user-image"> <img src="assets/images/me.jpg" class="caller-image circle" alt=""> </div> <div class="user-name">' + data.name + '</div> <div class="user-calling-status">Calling...</div> <div class="calling-action"> <div class="call-accept"><i class="material-icons green darken-2 white-text audio-icon">call</i></div> <div class="call-reject"><i class="material-icons red darken-3 white-text close-icon">close</i></div> </div> </div>';
+            var call_receive = document.querySelector('.call-accept');
+            var call_reject = document.querySelector('.call-reject');
+            
+            call_receive.addEventListener("click", function () {
+                offerProcess(data.offer, data.name)
+                call_status.innerHTML=''
+            })
+
+            call_reject.addEventListener("click", function () {
+                call_status.innerHTML=''
+                alert('Call rejected')
+            })
             break;
         case "answer":
             answerProcess(data.answer);
@@ -44,6 +56,15 @@ var username = url.searchParams.get("username");
 call_btn.addEventListener("click", function () {
     var call_to_username = call_to_username_input.value;
 
+    call_status.innerHTML = '<div class="calling-status-wrap card black white-text"> <div class="user-image"> <img src="assets/images/other.jpg" class="caller-image circle" alt=""> </div> <div class="user-name">' + call_to_username + '</div> <div class="user-calling-status">Calling...</div> <div class="calling-action"> <div class="call-reject"><i class="material-icons red darken-3 white-text close-icon">close</i></div> </div> </div>';
+  
+    var call_reject = document.querySelector('.call-reject');
+
+    call_reject.addEventListener('click', function () { 
+        call_status.innerHTML = ''
+        alert('Call rejected')
+    })
+    
     if (call_to_username.length > 0) {
         connected_user = call_to_username;
 
