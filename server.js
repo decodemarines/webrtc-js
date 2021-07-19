@@ -66,6 +66,17 @@ wss.on('connection', function (conn) {
                 }
     
                 break;
+                case "candidate":
+
+                    var connect = users[data.name];
+    
+                    if (connect != null) {
+                        sendToOtherUser(connect, {
+                            type: "candidate",
+                            candidate: data.candidate
+                        })
+                    }
+                    break;
         }
     })
 

@@ -1,6 +1,6 @@
 1. to run server: node server
 2. npm i -g node-static
-   to run client: static server
+   to run client: static
 3. client.js edit document
 
 ```
@@ -386,3 +386,6 @@ function sendToOtherUser(connection, message) {
     connection.send(JSON.stringify(message))
 }
 ```
+
+4. ice candidate accepts answer:
+   https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Connectivity#ice_candidates

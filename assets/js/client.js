@@ -14,9 +14,12 @@ connection.onmessage = function (msg) {
         case "offer":
             offerProcess(data.offer, data.name)
             break;
-            case "answer":
-                answerProcess(data.answer);
-                break;
+        case "answer":
+            answerProcess(data.answer);
+            break;
+        case "candidate":
+            candidateProcess(data.candidate);
+            break;
         default:   
             break;
     }
@@ -28,6 +31,8 @@ connection.onerror = function (error) {
 var local_video = document.querySelector("#local-video");
 var call_btn = document.querySelector("#call-btn");
 var call_to_username_input = document.querySelector("#username-input");
+var call_status = document.querySelector(".call-hang-status");
+
 
 var name;
 var connected_user;
@@ -109,16 +114,29 @@ function loginProcess(success) {
             });
     
             myConn.addStream(stream);
+            
+            myConn.onicecandidate = function (event) {
+                if (event.candidate) {
+                    send({
+                        type: "candidate",
+                        candidate: event.candidate
+
+                    })
+                }
+            }  
+
         }, function (error) {
             console.log(error) // DOMException: Permission denied
         });   
+
+
     }
 }
 
 function offerProcess(offer, name) {
     connected_user = name;
     myConn.setRemoteDescription(new RTCSessionDescription(offer))
-    //    alert(name);
+      alert(name);
     //create answer to an offer or user A.
     myConn.createAnswer(function (answer) {
         myConn.setLocalDescription(answer);
@@ -133,4 +151,8 @@ function offerProcess(offer, name) {
 }
 function answerProcess(answer) {
     myConn.setRemoteDescription(new RTCSessionDescription(answer));
+}
+
+function candidateProcess(candidate) {
+    myConn.addIceCandidate(new RTCIceCandidate(candidate))
 }
